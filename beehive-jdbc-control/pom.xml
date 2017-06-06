@@ -34,9 +34,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.moparisthebest.beehive</groupId>
-            <artifactId>beehive-jdbc-mapper</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.moparisthebest.jdbcmapper</groupId>
+            <artifactId>querymapper</artifactId>
         </dependency>
         <dependency>
             <groupId>com.moparisthebest.aptIn16</groupId>
