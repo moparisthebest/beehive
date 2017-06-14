@@ -36,6 +36,7 @@
         <dependency>
             <groupId>com.moparisthebest.jdbcmapper</groupId>
             <artifactId>querymapper</artifactId>
+            <classifier>jdk16</classifier>
         </dependency>
         <dependency>
             <groupId>com.moparisthebest.aptIn16</groupId>

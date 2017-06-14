@@ -16,6 +16,7 @@
         <dependency>
             <groupId>com.moparisthebest.jdbcmapper</groupId>
             <artifactId>querymapper</artifactId>
+            <classifier>jdk16</classifier>
         </dependency>
     </dependencies>
     <build>

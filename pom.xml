@@ -218,6 +218,7 @@
                 <groupId>com.moparisthebest.jdbcmapper</groupId>
                 <artifactId>querymapper</artifactId>
                 <version>1.0-SNAPSHOT</version>
+                <classifier>jdk16</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
