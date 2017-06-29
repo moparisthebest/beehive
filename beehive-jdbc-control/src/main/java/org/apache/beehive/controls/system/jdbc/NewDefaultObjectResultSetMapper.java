@@ -27,33 +27,11 @@ public class NewDefaultObjectResultSetMapper extends com.moparisthebest.jdbc.Cas
 	 */
 	@SuppressWarnings({"unchecked"})
 	public Object mapToResultType(ControlBeanContext context, Method m, ResultSet rs, Calendar cal) {
-		final Class returnType = m.getReturnType();
-		if (returnType.isArray()) {
-			return toArray(rs, returnType.getComponentType(), context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
-		} else if (Collection.class.isAssignableFrom(returnType)) {
-			return toCollection(rs, returnType, (Class) getActualTypeArguments(m)[0], context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
-		} else if (Map.class.isAssignableFrom(returnType)) {
-			Type[] types = getActualTypeArguments(m);
-			if (types[1] instanceof ParameterizedType) { // for collectionMaps
-				ParameterizedType pt = (ParameterizedType) types[1];
-				Class collectionType = (Class) pt.getRawType();
-				if (Collection.class.isAssignableFrom(collectionType))
-					return toMapCollection(rs, returnType, (Class) types[0], collectionType, (Class) pt.getActualTypeArguments()[0], context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
-			}
-			return toMap(rs, com.moparisthebest.jdbc.ResultSetMapper.instantiateClass((Class<Map>)returnType, HashMap.class), (Class) types[0], (Class) types[1], context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
-		} else if (Iterator.class.isAssignableFrom(returnType)) {
-			return ListIterator.class.isAssignableFrom(returnType) ?
-					toListIterator(rs, (Class) getActualTypeArguments(m)[0], context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal) :
-					toIterator(rs, (Class) getActualTypeArguments(m)[0], context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
-		} else {
-			return toObject(rs, returnType, cal);
-		}
+		final Type type = m.getGenericReturnType();
+		return toType(rs, m.getReturnType(), type instanceof ParameterizedType ? (ParameterizedType) type : null, context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
 	}
 
-	private static Type[] getActualTypeArguments(Method m) {
-		return ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments();
-	}
-
+	// todo: true is probably not valid for Stream and ResultSetIterable
 	public boolean canCloseResultSet() {
 		return true;
 	}
