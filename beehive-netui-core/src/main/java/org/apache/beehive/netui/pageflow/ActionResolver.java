@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Interface for controller classes that resolve actions to URIs.
  * 
- * @deprecated This is a legacy interface that is implemented by {@link PageFlowController}, but unused in the framework.
+ * Formerly deprecated: This is a legacy interface that is implemented by {@link PageFlowController}, but unused in the framework.
  */ 
 public interface ActionResolver
 {

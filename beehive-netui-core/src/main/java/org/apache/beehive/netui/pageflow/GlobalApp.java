@@ -37,7 +37,7 @@ import org.apache.struts.action.ActionMapping;
  * <p>
  * Data in the current GlobalApp instance can be accessed by databinding tags using the <code>globalApp</code> scope.
  * 
- * @deprecated Use a {@link SharedFlowController} instead.
+ * Formerly deprecated: Use a {@link SharedFlowController} instead.
  * @see PageFlowController
  */
 public class GlobalApp

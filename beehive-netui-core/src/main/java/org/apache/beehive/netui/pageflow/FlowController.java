@@ -87,7 +87,7 @@ public abstract class FlowController extends PageFlowManagedObject
     /**
      * The system default Locale.
      * 
-     * @deprecated Use {@link #getDefaultLocale}.
+     * Formerly deprecated: Use {@link #getDefaultLocale}.
      */
     protected static Locale defaultLocale = DEFAULT_LOCALE;
 
@@ -1872,7 +1872,7 @@ public abstract class FlowController extends PageFlowManagedObject
      * attribute for use by the Struts &lt;html:messages&gt; tag (if
      * messages="true" is set), if any messages are required.  Otherwise,
      * ensure that the request attribute is not created.
-     * @deprecated This method will be removed without replacement in a future release.
+     * Formerly deprecated: This method will be removed without replacement in a future release.
      *
      * @param request  The servlet request we are processing
      * @param messages Messages object
