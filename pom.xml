@@ -76,6 +76,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <pushChanges>false</pushChanges>
         <localCheckout>true</localCheckout>
+        <jar.classifier/>
     </properties>
     <packaging>pom</packaging>
     <modules>
@@ -218,7 +219,7 @@
                 <groupId>com.moparisthebest.jdbcmapper</groupId>
                 <artifactId>querymapper</artifactId>
                 <version>1.0-SNAPSHOT</version>
-                <classifier>jdk16</classifier>
+                <classifier>${jar.classifier}</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -308,4 +309,24 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>jdk6</id>
+            <activation>
+                <jdk>[1.6,1.8)</jdk>
+            </activation>
+            <properties>
+                <jar.classifier>jdk16</jar.classifier>
+            </properties>
+        </profile>
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <jar.classifier/>
+            </properties>
+        </profile>
+    </profiles>
 </project>
