@@ -28,7 +28,8 @@ public class NewDefaultObjectResultSetMapper extends com.moparisthebest.jdbc.Cas
 	@SuppressWarnings({"unchecked"})
 	public Object mapToResultType(ControlBeanContext context, Method m, ResultSet rs, Calendar cal) {
 		final Type type = m.getGenericReturnType();
-		return toType(rs, m.getReturnType(), type instanceof ParameterizedType ? (ParameterizedType) type : null, context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
+		// todo: is genericArray: false correct here? good enough I guess...
+		return toType(rs, m.getReturnType(), type instanceof ParameterizedType ? (ParameterizedType) type : null, false, context.getMethodPropertySet(m, JdbcControl.SQL.class).arrayMaxLength(), cal);
 	}
 
 	// todo: true is probably not valid for Stream and ResultSetIterable
