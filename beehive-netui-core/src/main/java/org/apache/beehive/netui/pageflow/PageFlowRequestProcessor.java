@@ -869,25 +869,25 @@ public class PageFlowRequestProcessor
             _servletContainerAdapter.endRequest( request, response );
             long timeTaken = System.currentTimeMillis() - startTime;
             er.endActionRequest( requestContext, timeTaken );
-        }
 
-        //
-        // Execute post-request interceptors
-        //
-        try
-        {
-            Interceptors.doPostIntercept( context, interceptors );
-        }
-        catch ( InterceptorException e )
-        {
-            ServletUtils.throwServletException(e);
-        }
+            //
+            // Execute post-request interceptors
+            //
+            try
+            {
+                Interceptors.doPostIntercept( context, interceptors );
+            }
+            catch ( InterceptorException e )
+            {
+                ServletUtils.throwServletException(e);
+            }
 
-        if ( LOG.isTraceEnabled() )
-        {
-            LOG.trace( "-------------------------------- End Request #" +
-                localRequestCount +
-                " ------------------------------------" );
+            if ( LOG.isTraceEnabled() )
+            {
+                LOG.trace( "-------------------------------- End Request #" +
+                        localRequestCount +
+                        " ------------------------------------" );
+            }
         }
     }
 
