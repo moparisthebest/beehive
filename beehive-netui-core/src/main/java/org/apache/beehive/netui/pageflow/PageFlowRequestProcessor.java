@@ -854,39 +854,37 @@ public class PageFlowRequestProcessor
         }
         finally
         {
-            //
-            // If this is not a forwarded request, then commit any session-scoped changes that were stored in the
-            // request.
-            //
-            if ( ! isForwardedRequest )
-            {
-                Handlers.get( getServletContext() ).getStorageHandler().applyChanges( requestContext );
-            }
+            try {
+                //
+                // If this is not a forwarded request, then commit any session-scoped changes that were stored in the
+                // request.
+                //
+                if (!isForwardedRequest) {
+                    Handlers.get(getServletContext()).getStorageHandler().applyChanges(requestContext);
+                }
 
-            //
-            // Callback to the server adapter.
-            //
-            _servletContainerAdapter.endRequest( request, response );
-            long timeTaken = System.currentTimeMillis() - startTime;
-            er.endActionRequest( requestContext, timeTaken );
+                //
+                // Callback to the server adapter.
+                //
+                _servletContainerAdapter.endRequest(request, response);
+                long timeTaken = System.currentTimeMillis() - startTime;
+                er.endActionRequest(requestContext, timeTaken);
 
-            //
-            // Execute post-request interceptors
-            //
-            try
-            {
-                Interceptors.doPostIntercept( context, interceptors );
-            }
-            catch ( InterceptorException e )
-            {
-                ServletUtils.throwServletException(e);
-            }
+            } finally {
+                //
+                // Execute post-request interceptors
+                //
+                try {
+                    Interceptors.doPostIntercept(context, interceptors);
+                } catch (InterceptorException e) {
+                    ServletUtils.throwServletException(e);
+                }
 
-            if ( LOG.isTraceEnabled() )
-            {
-                LOG.trace( "-------------------------------- End Request #" +
-                        localRequestCount +
-                        " ------------------------------------" );
+                if (LOG.isTraceEnabled()) {
+                    LOG.trace("-------------------------------- End Request #" +
+                            localRequestCount +
+                            " ------------------------------------");
+                }
             }
         }
     }
