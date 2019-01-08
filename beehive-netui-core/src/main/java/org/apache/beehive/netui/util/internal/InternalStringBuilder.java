@@ -45,7 +45,7 @@ public final class InternalStringBuilder
 
     public InternalStringBuilder( String str )
     {
-        this( str.length() + 16 );
+        this( (str == null ? 0 : str.length()) + 16 );
         append( str );
     }
 
@@ -98,12 +98,13 @@ public final class InternalStringBuilder
 
     public InternalStringBuilder append( Object obj )
     {
+        if ( obj == null ) return this; // this used to append "null"
         return append( String.valueOf( obj ) );
     }
 
     public InternalStringBuilder append( String str )
     {
-        if ( str == null ) str = String.valueOf( str );
+        if ( str == null ) return this; // this used to append "null" like: str = String.valueOf( str );
         int len = str.length();
         ensureCapacity( _length + len );
         str.getChars( 0, len, _buffer, _length );
