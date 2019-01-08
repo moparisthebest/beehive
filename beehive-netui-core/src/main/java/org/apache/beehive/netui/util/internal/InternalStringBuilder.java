@@ -19,6 +19,7 @@
 package org.apache.beehive.netui.util.internal;
 
 import java.io.Serializable;
+import java.lang.ref.SoftReference;
 
 
 /**
@@ -29,7 +30,6 @@ public final class InternalStringBuilder
 {
     private char _buffer[];
     private int _length = 0;
-    private boolean _shared;
 
     static final long serialVersionUID = 1;
 
@@ -41,7 +41,6 @@ public final class InternalStringBuilder
     public InternalStringBuilder( int length )
     {
         _buffer = new char[length];
-        _shared = false;
     }
 
     public InternalStringBuilder( String str )
@@ -55,17 +54,6 @@ public final class InternalStringBuilder
         return _length;
     }
 
-    private final void copyWhenShared()
-    {
-        if ( _shared )
-        {
-            char newValue[] = new char[_buffer.length];
-            System.arraycopy( _buffer, 0, newValue, 0, _length );
-            _buffer = newValue;
-            _shared = false;
-        }
-    }
-
     public void ensureCapacity( int minCapacity )
     {
         int maxCapacity = _buffer.length;
@@ -73,11 +61,17 @@ public final class InternalStringBuilder
         if ( minCapacity > maxCapacity )
         {
             int newCapacity = ( maxCapacity + 1 ) * 2;
-            if ( minCapacity > newCapacity ) newCapacity = minCapacity;
-            char newValue[] = new char[newCapacity];
+            if ( newCapacity < 0 ) newCapacity = Integer.MAX_VALUE;
+            else if ( minCapacity > newCapacity ) newCapacity = minCapacity;
+            // allow _buffer to be GCd if needed, rather than throw OOM
+            final SoftReference<char[]> softBuffer = new SoftReference<char[]>(_buffer);
+            _buffer = null;
+            final char newValue[] = new char[newCapacity];
+            _buffer = softBuffer.get();
+            if (_buffer == null)
+                throw new OutOfMemoryError("could not increase capacity in InternalStringBuilder");
             System.arraycopy( _buffer, 0, newValue, 0, _length );
             _buffer = newValue;
-            _shared = false;
         }
     }
 
@@ -88,7 +82,6 @@ public final class InternalStringBuilder
 
         if ( _length < length )
         {
-            copyWhenShared();
             while ( _length < length )
             {
                 _buffer[_length++] = '\0';
@@ -113,7 +106,6 @@ public final class InternalStringBuilder
         if ( str == null ) str = String.valueOf( str );
         int len = str.length();
         ensureCapacity( _length + len );
-        copyWhenShared();
         str.getChars( 0, len, _buffer, _length );
         _length += len;
         return this;
@@ -122,7 +114,6 @@ public final class InternalStringBuilder
     public InternalStringBuilder append( char c )
     {
         ensureCapacity( _length + 1 );
-        copyWhenShared();
         _buffer[_length++] = c;
         return this;
     }
@@ -134,7 +125,6 @@ public final class InternalStringBuilder
 
     public String toString()
     {
-        _shared = true;
         return new String( _buffer, 0, _length );
     }
 
